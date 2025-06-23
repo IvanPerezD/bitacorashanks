@@ -1,53 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bitácora del Pelirrojo</title>
   <style>
-    /* Fondo Parallax */
+    :root {
+      --logo-scale-inicial: 3;
+      --logo-scale-final: 1.5;
+      --logo-top-inicial: 2rem;
+      --logo-top-final: 1rem;
+    }
+
     body::before {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background-image: url('fondo.jpg');
       background-size: cover;
       background-attachment: fixed;
       background-position: center;
       background-repeat: no-repeat;
       z-index: -1;
-      filter: brightness(0.5);
+      filter: brightness(0.55);
     }
 
-    /* Imagen fija centrada */
     .fixed-logo {
       position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      width: 150px;
-      opacity: 0.8;
+      left: -10vw;
+      top: 70vh;
+      transform: translateY(-50%);
+      width: 50vw;
+      max-width: 850px;
+      z-index: 500;
+      opacity: 1;
       pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .titulo-imagen {
+      position: absolute;
+      top: var(--logo-top-inicial);
+      left: 60%;
+      transform: translateX(-50%) scale(var(--logo-scale-inicial));
+      transition: transform 0.5s ease, left 0.5s ease, top 0.5s ease, opacity 0.3s ease;
+      max-width: 20vw;
+      height: auto;
+      z-index: 10;
+      will-change: transform, left, top, opacity;
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    #titulo-placeholder {
+      height: 7px;
     }
 
     body {
       margin: 0;
+      padding-left: 5vw;
       font-family: 'Arial', sans-serif;
       color: #fff;
       background-color: #000;
-    }
-
-    h1 {
-      font-family: 'Arial', sans-serif;
-      font-size: 3rem;
-      margin-top: 2rem;
-      text-align: center;
-      text-shadow: 2px 2px 5px black;
-      color: white;
+      overflow-x: hidden;
     }
 
     .timeline-container {
@@ -56,26 +72,30 @@
       align-items: center;
       flex-direction: column;
       min-height: 100vh;
-      padding: 2rem 0;
-      background-color: rgba(0, 0, 0, 0.3);
+      padding-top: 25rem;
+      padding-bottom: 2rem;
+      width: 100%;
+      box-sizing: border-box;
     }
 
+    /* Fijo ancho de timeline */
     .timeline {
       position: relative;
-      width: 80%;
-      max-width: 600px;
-      margin: 2rem auto;
+      width: 650px;
+      margin: 0 auto;
       padding-left: 30px;
-      border-left: 4px solid #e63946;
+      border-left: 4px solid #FFFFFF;
       background-color: rgba(0, 0, 0, 0.4);
       border-radius: 10px;
-      padding: 2rem;
+      padding: 5rem;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      box-sizing: border-box;
+      transition: width 0.3s ease;
     }
 
     .event {
       position: relative;
-      margin: 2rem 0;
+      margin: 2vh 0;
       cursor: pointer;
     }
 
@@ -97,14 +117,7 @@
       transform: scale(1.2);
     }
 
-    .event:hover .details {
-      max-height: 500px;
-      padding: 1rem;
-      opacity: 1;
-    }
-
     .label {
-      font-family: 'Arial', sans-serif;
       font-weight: bold;
       font-size: 1.2rem;
       text-align: center;
@@ -126,6 +139,13 @@
       border-radius: 10px;
     }
 
+    .event:hover .details,
+    .event.active .details {
+      max-height: 500px;
+      padding: 1rem;
+      opacity: 1;
+    }
+
     .details img {
       width: 100%;
       margin-top: 1rem;
@@ -145,18 +165,128 @@
       border-radius: 10px;
       margin-bottom: 1rem;
     }
+
+    /* Media queries para pantallas pequeñas */
+    @media (max-width: 900px) {
+      body {
+        padding-left: 3vw;
+      }
+
+      .titulo-imagen {
+        position: fixed; /* quitamos !important */
+        top: 2rem;       /* para animar */
+        left: 50%;
+        transform: translateX(-50%) scale(1);
+        max-width: 90vw;
+        z-index: 1000;
+        opacity: 1;
+        pointer-events: none;
+        will-change: transform, left, top, opacity;
+        transition: top 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .timeline {
+        width: 85vw;
+        padding-left: 20px;
+        min-width: 240px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .titulo-imagen {
+        position: fixed;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%) scale(1);
+        max-width: 90vw;
+        z-index: 1000;
+        opacity: 1;
+        pointer-events: none;
+        will-change: transform, left, top, opacity;
+        transition: top 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .timeline {
+        width: 95vw;
+        padding-left: 10px;
+        min-width: 200px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .titulo-imagen {
+        position: fixed;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%) scale(1);
+        max-width: 90vw;
+        z-index: 1000;
+        opacity: 1;
+        pointer-events: none;
+        will-change: transform, left, top, opacity;
+        transition: top 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .timeline {
+        width: 98vw;
+        padding-left: 5px;
+        min-width: 180px;
+      }
+    }
+
+    @media (max-width: 1850px) {
+      .fixed-logo {
+        display: none;
+      }
+
+@media (max-width: 900px) {
+  /* ... estilos que ya tienes ... */
+
+  /* Fijar tamaño y posición de los círculos rojos sin escalar */
+  .event::before {
+    width: 20px !important;       /* ancho fijo */
+    height: 20px !important;      /* alto fijo */
+    left: 45px !important;       /* posición fija */
+    top: 0 !important;            /* posición fija */
+    border-width: 3px !important; /* borde fijo */
+  }
+}
+
+@media (max-width: 600px) {
+  /* ... estilos que ya tienes ... */
+
+  /* Repetimos para asegurar que en móviles pequeños se mantiene igual */
+  .event::before {
+    width: 18px !important;
+    height: 18px !important;
+    left: 25px !important;
+    top: 0 !important;
+    border-width: 3px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  /* ... estilos que ya tienes ... */
+
+  .event::before {
+    width: 15px !important;
+    height: 15px !important;
+    left: 20px !important;
+    top: 0 !important;
+    border-width: 3px !important;
+  }
+}
+
+    }
   </style>
 </head>
 <body>
+  <img src="shanks_29.png" alt="Logo de Shanks" class="fixed-logo" />
+  <img src="titulo-shanks.png" alt="Título Bitácora del Pelirrojo" class="titulo-imagen" id="tituloImagen" />
+  <div id="titulo-placeholder"></div>
 
-  <!-- Imagen fija centrada -->
-  <img src="logo-shanks.png" alt="Logo de Shanks" class="fixed-logo">
-
-  <!-- Contenido sobre el parallax -->
   <div class="timeline-container">
-    <h1>Bitácora del Pelirrojo</h1>
-
-    <div class="timeline">
+    <div class="timeline" id="timeline">
       <div class="event">
         <div class="label">Hace 39 años</div>
         <div class="details">
@@ -198,10 +328,27 @@
       </div>
 
       <div class="event">
+        <div class="label">Hace 25 años</div>
+        <div class="details">
+          <p>Conoce a Teach. Roger parte hacia Laugh Tale sin él.</p>
+          <img src="13.jpg" alt="Evento hace 26 años">
+        </div>
+      </div>
+
+
+      <div class="event">
         <div class="label">Hace 22 años</div>
         <div class="details">
           <p>Presencia la ejecución de Roger. Rechaza formar banda con Buggy.</p>
           <img src="17.jpg" alt="Evento hace 22 años">
+        </div>
+      </div>
+
+      <div class="event">
+        <div class="label">Hace 14 años</div>
+        <div class="details">
+          <p>Conoce a Teach. Roger parte hacia Laugh Tale sin él.</p>
+          <img src="13.jpg" alt="Evento hace 26 años">
         </div>
       </div>
 
@@ -230,15 +377,136 @@
       </div>
 
       <div class="event">
+        <div class="label">Hace 4 años</div>
+        <div class="details">
+          <p>Conoce a Teach. Roger parte hacia Laugh Tale sin él.</p>
+          <img src="13.jpg" alt="Evento hace 26 años">
+        </div>
+      </div>
+
+      <div class="event">
+        <div class="label">Hace 2 años</div>
+        <div class="details">
+          <p>Conoce a Teach. Roger parte hacia Laugh Tale sin él.</p>
+          <img src="13.jpg" alt="Evento hace 26 años">
+        </div>
+      </div>
+
+
+      <div class="event">
         <div class="label">En la actualidad</div>
         <div class="details">
           <p>Shanks decide ir a por el One Piece tras ver la recompensa de Luffy como Nika.</p>
           <img src="39.jpg" alt="Evento actual">
         </div>
       </div>
-
     </div>
   </div>
 
+
+<script>
+  const titulo = document.getElementById('tituloImagen');
+  const timeline = document.getElementById('timeline');
+
+  let startLeft, endLeft;
+
+  function updateMeasurements() {
+    const rectTitulo = titulo.getBoundingClientRect();
+    startLeft = rectTitulo.left + window.scrollX;
+
+    const rectTimeline = timeline.getBoundingClientRect();
+    endLeft = rectTimeline.right + 40;
+  }
+
+  const scrollRange = 25;
+  const triggerOffsetTop = 50;
+
+  function lerp(start, end, t) {
+    return start + (end - start) * t;
+  }
+
+  function onScroll() {
+    const scrollY = window.scrollY;
+    const isMobile = window.matchMedia("(max-width: 900px)").matches;
+
+    if (isMobile) {
+      if (scrollY < triggerOffsetTop) {
+        titulo.style.position = 'fixed';
+        titulo.style.top = '2rem';         // valor visible inicial para móvil
+        titulo.style.left = '50%';
+        titulo.style.transform = 'translateX(-50%) scale(1)';
+        titulo.style.opacity = '1';
+        titulo.style.pointerEvents = 'none';
+      } else if (scrollY >= triggerOffsetTop && scrollY <= triggerOffsetTop + scrollRange * 4) {
+        const progress = (scrollY - triggerOffsetTop) / (scrollRange * 4);
+        const topVal = lerp(2, -10, progress) + 'rem'; // sube fuera pantalla
+        const opacityVal = lerp(1, 0, progress);
+        titulo.style.top = topVal;
+        titulo.style.opacity = opacityVal.toString();
+        titulo.style.position = 'fixed';
+        titulo.style.left = '50%';
+        titulo.style.transform = 'translateX(-50%) scale(1)';
+        titulo.style.pointerEvents = 'none';
+      } else {
+        titulo.style.position = 'fixed';
+        titulo.style.top = '-10rem';        // fuera pantalla
+        titulo.style.opacity = '0';
+        titulo.style.left = '50%';
+        titulo.style.transform = 'translateX(-50%) scale(1)';
+        titulo.style.pointerEvents = 'none';
+      }
+    } else {
+      // Código para escritorio sin cambios
+      if (scrollY < triggerOffsetTop) {
+        titulo.style.position = 'absolute';
+        titulo.style.left = '60%';
+        titulo.style.top = '6.5rem';
+        titulo.style.transform = 'translateX(-80%) scale(3)';
+        titulo.style.opacity = '1';
+        titulo.style.pointerEvents = 'none';
+      } else if (scrollY >= triggerOffsetTop && scrollY <= triggerOffsetTop + scrollRange) {
+        const progress = (scrollY - triggerOffsetTop) / scrollRange;
+        const currentLeft = lerp(startLeft, endLeft, progress);
+        const scale = lerp(3, 1.5, progress);
+        titulo.style.position = 'fixed';
+        titulo.style.left = `${currentLeft}px`;
+        titulo.style.top = '1rem';
+        titulo.style.transform = `translateX(-50%) scale(${scale})`;
+        titulo.style.opacity = '1';
+        titulo.style.pointerEvents = 'none';
+      } else {
+        titulo.style.position = 'fixed';
+        titulo.style.left = `${endLeft}px`;
+        titulo.style.top = '1rem';
+        titulo.style.transform = 'translateX(10%) scale(1.5)';
+        titulo.style.opacity = '1';
+        titulo.style.pointerEvents = 'none';
+      }
+    }
+  }
+
+  window.addEventListener('load', () => {
+    updateMeasurements();
+    onScroll();
+  });
+
+  window.addEventListener('resize', () => {
+    updateMeasurements();
+    onScroll();
+  });
+
+  window.addEventListener('scroll', () => {
+    window.requestAnimationFrame(onScroll);
+  });
+
+  // Toggle detalles eventos
+  document.querySelectorAll('.event').forEach(event => {
+    event.addEventListener('click', () => {
+      event.classList.toggle('active');
+    });
+  });
+</script>
+
 </body>
 </html>
+
